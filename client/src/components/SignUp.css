@@ -1,0 +1,77 @@
+/* SignUp.css */
+
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff;
+  }
+  
+  .image-container {
+    flex: 1;
+  }
+  
+  .signup-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .form-container {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  h2 {
+    color: #3a244a;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-wrapper {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  select {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background-color: transparent;
+    outline: none;
+  }
+  
+  input[type="text"]::placeholder,
+  input[type="password"]::placeholder,
+  input[type="email"]::placeholder,
+  select::placeholder {
+    color: #3a244a;
+  }
+  
+  button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #3a244a;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #5b3d67;
+  }
+

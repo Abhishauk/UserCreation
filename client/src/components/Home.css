@@ -1,0 +1,26 @@
+body {
+    background-color: #f2f2f2; /* Full gray background color */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+  }
+  
+  .container {
+    text-align: center;
+    padding: 20px; /* Add padding for spacing */
+  }
+  
+  .images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px; /* Rounded corners */
+    background-color: white; /* White background color */
+    margin: 10px; /* Add margin for spacing between images */
+  }
+  
