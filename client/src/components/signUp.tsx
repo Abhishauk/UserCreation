@@ -1,5 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import "./SignUp.css"; 
+import axios from "axios";
+import "./signup.css"
+import { useNavigate } from "react-router-dom";
 
 interface FormData {
   firstName: string;
@@ -19,6 +21,7 @@ const SignUp = () => {
     contactMode: "",
     email: ""
   });
+  const navigate = useNavigate(); 
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -28,11 +31,34 @@ const SignUp = () => {
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted with data:", formData);
-    
+  
+    try {
+      const response = await axios({
+        method: "post",
+        url: "http://localhost:6001/signup",
+        data: formData
+      });
+      
+      console.log("Response from server:", response.data);
+      setFormData({
+        firstName: '',
+        lastName: '',
+        password: '',
+        retypePassword: '',
+        contactMode: '',
+        email: ''
+       
+      });
+      navigate("/mainPage")
+      
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
+  
 
   return (
     <div className="signup-container">

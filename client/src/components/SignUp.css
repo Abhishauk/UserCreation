@@ -1,77 +1,71 @@
-/* SignUp.css */
+
 
 .signup-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #ffffff;
   }
   
   .image-container {
-    flex: 1;
+    margin-right: 20px;
   }
   
   .signup-image {
-    width: 100%;
-    height: auto;
+    width: 250px;
+    height: 250px;
   }
   
   .form-container {
-    flex: 1;
-    padding: 20px;
-  }
-  
-  h2 {
-    color: #3a244a;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
+    width: 250px; 
+    margin-left: 20px; 
+    margin-right: 20px; 
   }
   
   .form-wrapper {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
+    background-color: #f9f9f9;
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: none;
   }
   
   .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
   }
   
   input[type="text"],
   input[type="password"],
-  input[type="email"],
   select {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 10px;
+    width: 100%; 
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
     border: none;
     border-bottom: 1px solid #ccc;
     background-color: transparent;
-    outline: none;
+    font-size: 6px;
+    outline: none; 
   }
   
-  input[type="text"]::placeholder,
-  input[type="password"]::placeholder,
-  input[type="email"]::placeholder,
-  select::placeholder {
-    color: #3a244a;
+  select[name="contactMode"] {
+    width: 110%; 
   }
   
   button[type="submit"] {
-    width: 100%;
+    width: 100%; 
+    margin-left: auto;
+    margin-right: auto;
     padding: 10px;
-    background-color: #3a244a;
-    color: #ffffff;
+    background-color: #5b3d67;
+    color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
   }
   
   button[type="submit"]:hover {
     background-color: #5b3d67;
   }
-
+  
