@@ -5,6 +5,8 @@ import Home from './components/Home';
 import SignIn from './components/signIn';
 import SignUp from './components/signUp';
 import MainPage from './components/MainPage';
+import SignupOTP from './components/signupOTP';
+import SigninOTP from './components/signinOTP';
 
 
 
@@ -17,6 +19,8 @@ function App() {
           <Route path='/signup' element={<SignUp />} />
           <Route path='/signin' element={<SignIn />} />
           <Route path='/mainPage' element={<MainPage />} />
+          <Route path='/signupOTP' element={<SignupOTP />}/>
+          <Route path='/signinOTP' element={<SigninOTP />}/>
     
         </Routes>
       </div>

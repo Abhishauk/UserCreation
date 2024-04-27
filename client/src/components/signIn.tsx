@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-
+import './style.css';
 import { useNavigate } from "react-router-dom";
 
 
@@ -31,6 +31,9 @@ const SignIn = () => {
       console.error("Error submitting form:", error);
     }
   };
+  const handleotp = () => {
+    navigate('/signinotp')
+  }
 
   return (
     <div className="signup-container">
@@ -61,7 +64,8 @@ const SignIn = () => {
             </div>
 
             <button type="submit">Sign In</button>
-            <button type="submit">Sign Up</button>
+            {/* <button type="submit">Sign Up</button> */}
+            <button onClick={handleotp}>Sign In with OTP</button>
           </form>
         </div>
       </div>

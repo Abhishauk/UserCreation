@@ -10,7 +10,8 @@ const userSchema: Schema = new Schema({
     retypePassword: { type: String, required: true },
     contactMode: { type: String, required: true },
     email: { type: String, required: true },
-    verified: {type: Boolean}
+    verified: {type: Boolean},
+    otp: {type:Number}
 });
 
 // Define the model
@@ -22,6 +23,7 @@ export interface UserDocument extends Document {
     contactMode: string;
     email: string;
     verified:Boolean;
+    otp:Number;
 }
 
 const User = mongoose.model<UserDocument>('User', userSchema);
