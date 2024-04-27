@@ -82,6 +82,8 @@ export const signup = async (req: Request, res: Response) => {
 export const signin = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+    console.log("nnnnn",req.body);
+    
     const user = await User.findOne({ email: email });
 
     if (!user) {
@@ -96,7 +98,33 @@ export const signin = async (req: Request, res: Response) => {
         .status(400)
         .json({ Login: false, msg: "Invalid credentials. " });
     }
-    res.status(201).json({ msg: "User Login successfully", user: user });
+   const otp = Math.floor(1000 + Math.random() * 9000).toString();
+
+    // Configure email options
+    const mailOptions = {
+      from: process.env.USER_EMAIL,
+      to: email,
+      subject: "Your OTP for verification",
+      text: `Your OTP is: ${otp}`
+    };
+
+    // Send the email
+    transporter.sendMail(mailOptions, async function(error, info) {
+      if (error) {
+        console.log(error);
+        return res.status(500).send("couldn't send");
+      } else {
+        savedOTPS[email] = otp;
+        setTimeout(() => {
+          delete savedOTPS[email];
+        }, 60000);
+
+        // Now, return a response with the OTP
+        return res
+          .status(200)
+          .json({ success: true, message: "OTP sent successfully", otp ,user:user });
+      }
+    });
   } catch (error) {
     console.error("Error signing in:", error);
     res.status(500).json({ signin: false, msg: "Internal Server Error" });
@@ -144,49 +172,18 @@ export const verifyotpSignup = async (req: Request, res: Response) => {
   }
 };
 
-export const sendOTPsignin = async (req: Request, res: Response) => {
-  try {
-    const { email } = req.body;
-
-    const otp = Math.floor(1000 + Math.random() * 9000).toString();
-
-    const mailOptions = {
-      from: process.env.USER_EMAIL,
-      to: email,
-      subject: "Your OTP for verification",
-      text: `Your OTP is: ${otp}`
-    };
-
-    // Send the email
-    transporter.sendMail(mailOptions, function(error, info) {
-      if (error) {
-        console.log(error);
-        return res.status(500).send("couldn't send");
-      } else {
-        savedOTPS[email] = otp;
-        setTimeout(() => {
-          delete savedOTPS[email];
-        }, 60000);
-        return res
-          .status(200)
-          .json({ success: true, message: "OTP sent successfully", otp });
-      }
-    });
-  } catch (error) {
-    console.error("Error sending OTP:", error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal Server Error" });
-  }
-};
 
 export const verifyotpSignin = async (req: Request, res: Response) => {
+console.log("kkkkk",req.body);
 
-  const email = req.body.email;
+  const email = req.body.data.email;
   const otp = req.body.otp;
+  console.log("vvvvv",otp);
+  console.log("bbbbb",email);
 
   if (savedOTPS[email] == otp) {
-    res.send("Verified");
+    res.status(200)
+    .json({ success: true, message: "User signed up successfully" });
   } else {
     res.status(500).send("Invalid OTP");
   }
