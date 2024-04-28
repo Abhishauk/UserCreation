@@ -20,7 +20,7 @@ app.post('/signup',router)
 app.post('/signin',router)
 app.post('/sendotp-signup',router)
 app.post('/verifyotp-signup' ,router)
-app.post('/sendotp-signin',router)
+app.post('/signin-sendotp',router)
 app.post('/verifyotp-signin' ,router)
 
 
