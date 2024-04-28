@@ -27,15 +27,19 @@ const SignIn = () => {
         data: formData
       })
       console.log("Response from server:", response.data);
-      
+      navigate("/mainPage")
       setFormData({ email: "", password: "" });
       setOtpSent(true);
       setSuccessMessage("OTP sent successfully.");
-      navigate("/signinotp",{ state: { formData } });
+      
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
+  const handleotp = () => {
+    navigate("/signinotp",{ state: { formData } });
+
+  }
 
   return (
     <div className="signup-container">
@@ -67,7 +71,7 @@ const SignIn = () => {
 
             <button type="submit">Sign In</button>
             {/* <button type="submit">Sign Up</button> */}
-            {/* <button onClick={handleotp}>Sign In with OTP</button> */}
+            <button onClick={handleotp}>Sign In with OTP</button>
           </form>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 
 const SigninOTP: React.FC = () => {
 
+  const [email, setEmail] = useState<string>(""); // State for email input
   const [otp, setOtp] = useState<string[]>(["", "", "", ""]); // Array to hold individual OTP digits
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -16,28 +17,46 @@ const SigninOTP: React.FC = () => {
   const formData = location.state?.formData;
   console.log("xxxxxxxxxx",formData);
 
-  const handleVerifyOtp = async (): Promise<void> => {
+  const handleSendOtp = async (): Promise<void> => {
     try {
-      const enteredOtp: string = otp.join("");
-      console.log("3333333", enteredOtp);
-
       const response = await axios.post(
-        "http://localhost:6001/verifyotp-signin",
+        "http://localhost:6001/signin-sendotp",
         {
-          data:formData,
-          otp: enteredOtp
+          email: email
         }
       );
       console.log(response.data); // Assuming the backend sends some response data
-      // Handle response from the backend accordingly
+      setSuccessMessage("OTP sent successfully to your email.");
+      setErrorMessage("");
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      setErrorMessage("Error sending OTP. Please try again.");
+      setSuccessMessage("");
+    }
+  };
+
+  const handleVerifyOtp = async (): Promise<void> => {
+    try {
+      const enteredOtp: string = otp.join("");
+      console.log("Entered OTP:", enteredOtp);
+
+      const response = await axios.post(
+        "http://localhost:6001/verifyotp",
+        {
+          email: email,
+          otp: enteredOtp
+        }
+      );
+      
+      // Assuming the backend sends some response data
       if (response.status === 200) {
         setSuccessMessage("OTP verified successfully");
         setErrorMessage("");
+        navigate("/mainPage");
       } else {
         setErrorMessage("Invalid OTP");
         setSuccessMessage("");
       }
-      navigate("/mainPage");
     } catch (error) {
       console.error("Error verifying OTP:", error);
       setErrorMessage("Error verifying OTP. Please try again.");
@@ -51,34 +70,52 @@ const SigninOTP: React.FC = () => {
     setOtp(newOtp);
   };
 
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setEmail(e.target.value);
+  };
+
   return (
     <div className='otpcontainer'>
-    <h3>OTP Verification</h3>
-    
+      <h3>OTP Verification</h3>
 
-    <div className='success'>{successMessage}</div>
-      <div className='verification'>
-       
-        <div className='otp-input-fields'>
-          {otp.map((digit, index) => (
-            <input
-              key={index}
-              type='num'
-              className={`otp_num otp_num_${index + 1}`}
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChangeOtp(index, e.target.value)}
-            />
-          ))}
+      {successMessage && <div className='success'>{successMessage}</div>}
+      {errorMessage && <div className='error'>{errorMessage}</div>}
+
+      {!successMessage && (
+        <div className='verification'>
+          <input
+            type='email'
+            placeholder='Enter your email'
+            value={email}
+            onChange={handleEmailChange}
+          />
+          <button className='btn' onClick={handleSendOtp}>
+            Send OTP
+          </button>
         </div>
-        <div className='error'>{errorMessage}</div>
-        <button className='btn' onClick={handleVerifyOtp}>
-          Verify OTP
-        </button>
-      </div>
-    
-  </div>
-);
+      )}
+
+      {successMessage && !errorMessage && (
+        <div className='verification'>
+          <div className='otp-input-fields'>
+            {otp.map((digit, index) => (
+              <input
+                key={index}
+                type='number'
+                className={`otp_num otp_num_${index + 1}`}
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleChangeOtp(index, e.target.value)}
+              />
+            ))}
+          </div>
+          <button className='btn' onClick={handleVerifyOtp}>
+            Verify OTP
+          </button>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default SigninOTP;
