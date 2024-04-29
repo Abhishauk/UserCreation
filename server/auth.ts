@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import User from "./models/usermodel";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 interface SavedOTPS {
@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.USER_EMAIL,
-    pass: process.env.USER_PASSWORD 
+    pass: process.env.USER_PASSWORD
   }
 });
 
@@ -42,9 +42,9 @@ export const signup = async (req: Request, res: Response) => {
       return res.status(400).json({ msg: "password does not match" });
     }
     const existuser = await User.findOne({ email });
-    // if (existuser) {
-    //   return res.status(400).json({ msg: "email already exists" });
-    // }
+    if (existuser) {
+      return res.status(400).json({ msg: "email already exists" });
+    }
 
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
 
@@ -113,14 +113,14 @@ export const sendOTPsignin = async (req: Request, res: Response) => {
 
     // Configure email options
     const mailOptions = {
-      from: 'abhizzzzzzz49@gmail.com', // Update with your email
+      from: process.env.USER_EMAIL, // Update with your email
       to: email,
-      subject: 'Your OTP for verification',
+      subject: "Your OTP for verification",
       text: `Your OTP is: ${otp}`
     };
 
     // Send the email
-    transporter.sendMail(mailOptions, function (error, info) {
+    transporter.sendMail(mailOptions, function(error, info) {
       if (error) {
         console.log(error);
         return res.status(500).send("couldn't send");
@@ -129,21 +129,23 @@ export const sendOTPsignin = async (req: Request, res: Response) => {
         setTimeout(() => {
           delete savedOTPS[email];
         }, 60000);
-        return res.status(200).json({ success: true, message: 'OTP sent successfully', otp });
+        return res
+          .status(200)
+          .json({ success: true, message: "OTP sent successfully", otp });
       }
     });
   } catch (error) {
     // Handle errors
-    console.error('Error sending OTP:', error);
-    return res.status(500).json({ success: false, message: 'Internal Server Error' });
+    console.error("Error sending OTP:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
   }
 };
 
-
-
 export const verifyotpSignup = async (req: Request, res: Response) => {
   try {
-    const  otp  = req.body.otp;
+    const otp = req.body.otp;
     const {
       email,
       firstName,
@@ -151,7 +153,7 @@ export const verifyotpSignup = async (req: Request, res: Response) => {
       password,
       retypePassword,
       contactMode
-    } = req.body.data; 
+    } = req.body.data;
 
     if (savedOTPS[email] == otp) {
       const salt = bcrypt.genSaltSync();
@@ -182,19 +184,23 @@ export const verifyotpSignup = async (req: Request, res: Response) => {
   }
 };
 
-
 export const verifyotpSignin = async (req: Request, res: Response) => {
-console.log("kkkkk",req.body);
+  console.log("Request body:", req.body);
 
-  const email = req.body.data.email;
-  const otp = req.body.otp;
-  console.log("vvvvv",otp);
-  console.log("bbbbb",email);
+  const { email, otp } = req.body;
 
-  if (savedOTPS[email] == otp) {
-    res.status(200)
-    .json({ success: true, message: "User signed up successfully" });
+  console.log("Received OTP:", otp);
+  console.log("User's email:", email);
+
+  console.log("Saved OTPs:", savedOTPS);
+
+  if (savedOTPS[email] === otp) {
+    console.log("OTP matched.");
+    return res
+      .status(200)
+      .json({ success: true, message: "User signed in successfully" });
   } else {
-    res.status(500).send("Invalid OTP");
+    console.log("Invalid OTP.");
+    return res.status(400).json({ success: false, message: "Invalid OTP" });
   }
 };

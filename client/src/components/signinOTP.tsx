@@ -41,7 +41,7 @@ const SigninOTP: React.FC = () => {
       console.log("Entered OTP:", enteredOtp);
 
       const response = await axios.post(
-        "http://localhost:6001/verifyotp",
+        "http://localhost:6001/verifyotp-signin",
         {
           email: email,
           otp: enteredOtp

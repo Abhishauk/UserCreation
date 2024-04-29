@@ -3,12 +3,8 @@ import axios from "axios";
 import './style.css';
 import { useNavigate } from "react-router-dom";
 
-
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [otpSent, setOtpSent] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-
   const navigate = useNavigate(); 
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,20 +21,17 @@ const SignIn = () => {
         method: "post",
         url: "http://localhost:6001/signin",
         data: formData
-      })
+      });
       console.log("Response from server:", response.data);
-      navigate("/mainPage")
+      navigate("/mainPage");
       setFormData({ email: "", password: "" });
-      setOtpSent(true);
-      setSuccessMessage("OTP sent successfully.");
-      
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
+
   const handleotp = () => {
     navigate("/signinotp",{ state: { formData } });
-
   }
 
   return (
@@ -70,7 +63,7 @@ const SignIn = () => {
             </div>
 
             <button type="submit">Sign In</button>
-            {/* <button type="submit">Sign Up</button> */}
+            
             <button onClick={handleotp}>Sign In with OTP</button>
           </form>
         </div>
