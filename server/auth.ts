@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
+
 dotenv.config();
 interface SavedOTPS {
   [key: string]: string;
@@ -202,5 +203,96 @@ export const verifyotpSignin = async (req: Request, res: Response) => {
   } else {
     console.log("Invalid OTP.");
     return res.status(400).json({ success: false, message: "Invalid OTP" });
+  }
+};
+
+
+export const sendOTPforgot = async (req: Request, res: Response) => {
+  try {
+    // Extract email from the request body
+    const { email } = req.body;
+
+    // Check if the user exists in the database
+    const user = await User.findOne({ email: email });
+
+    // If user doesn't exist, return error
+    if (!user) {
+      return res.status(400).json({ success: false, message: "Invalid user" });
+    }
+
+    // Generate OTP (for demonstration purposes)
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+
+    // Configure email options
+    const mailOptions = {
+      from: process.env.USER_EMAIL, // Update with your email
+      to: email,
+      subject: "Your OTP for verification",
+      text: `Your OTP is: ${otp}`
+    };
+
+    // Send the email
+    transporter.sendMail(mailOptions, function(error, info) {
+      if (error) {
+        console.log(error);
+        return res.status(500).send("Couldn't send");
+      } else {
+        savedOTPS[email] = otp;
+        setTimeout(() => {
+          delete savedOTPS[email];
+        }, 60000);
+        return res
+          .status(200)
+          .json({ success: true, message: "OTP sent successfully", otp });
+      }
+    });
+  } catch (error) {
+    // Handle errors
+    console.error("Error sending OTP:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export const verifyotpforgot = async(req: Request , res: Response) => {
+  console.log("Request bodyyyyyyyyy:", req.body);
+
+  const { email, otp } = req.body;
+
+  console.log(" OTP:", otp);
+  console.log(" email:", email);
+
+  console.log("Saved OTPs:", savedOTPS);
+
+  if (savedOTPS[email] === otp) {
+    console.log("OTP matched.");
+    return res
+      .status(200)
+      .json({ success: true, message: "otp verified successfully" });
+  } else {
+    console.log("Invalid OTP.");
+    return res.status(400).json({ success: false, message: "Invalid OTP" });
+  }
+}
+
+
+
+
+
+export const setpassword = async (req: Request, res: Response) => {
+  try {
+    const { email, newpass } = req.body;
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(newpass, 10); // 10 is the salt rounds
+
+    // Update the user's hashed password in the database
+    await User.updateOne({ email: email }, { $set: { password: hashedPassword } });
+
+    return res.status(200).json({ success: true, message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    return res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };

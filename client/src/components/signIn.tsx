@@ -33,6 +33,9 @@ const SignIn = () => {
   const handleotp = () => {
     navigate("/signinotp",{ state: { formData } });
   }
+  const handleForgotPassword = () => {
+    navigate("/forgotpass")
+  }
 
   return (
     <div className="signup-container">
@@ -64,7 +67,8 @@ const SignIn = () => {
 
             <button type="submit">Sign In</button>
             
-            <button onClick={handleotp}>Sign In with OTP</button>
+            <button className="btn" onClick={handleotp}>SignIn with OTP</button>
+            <a onClick={handleForgotPassword}><p>forgot password</p></a>
           </form>
         </div>
       </div>

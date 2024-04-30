@@ -22,6 +22,9 @@ app.post('/sendotp-signup',router)
 app.post('/verifyotp-signup' ,router)
 app.post('/signin-sendotp',router)
 app.post('/verifyotp-signin' ,router)
+app.post('/verifyotp-forgot',router)
+app.post('/forgot-sendotp',router)
+app.post('/setpassword',router)
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/Users');

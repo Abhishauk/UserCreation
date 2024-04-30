@@ -7,6 +7,8 @@ import SignUp from './components/signUp';
 import MainPage from './components/MainPage';
 import SignupOTP from './components/signupOTP';
 import SigninOTP from './components/signinOTP';
+import Forgotpass from './components/forgotPass';
+import SetPassword from './components/setPassword';
 
 
 
@@ -21,6 +23,8 @@ function App() {
           <Route path='/mainPage' element={<MainPage />} />
           <Route path='/signupOTP' element={<SignupOTP />}/>
           <Route path='/signinOTP' element={<SigninOTP />}/>
+          <Route path='/forgotpass' element={<Forgotpass />}/>
+          <Route path='/setPassword' element={<SetPassword />}/>
     
         </Routes>
       </div>

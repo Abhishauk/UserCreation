@@ -1,26 +1,31 @@
-import React, { useState } from "react";
-import "./style.css";
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
+const ForgotPass: React.FC = () => {
 
-const SigninOTP: React.FC = () => {
-
-  const [email, setEmail] = useState<string>(""); // State for email input
+  const [email, setEmail] = useState<string>("");
   const [otp, setOtp] = useState<string[]>(["", "", "", ""]); // Array to hold individual OTP digits
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const navigate = useNavigate();
 
-  const location = useLocation();
-  const formData = location.state?.formData;
-  console.log("xxxxxxxxxx",formData);
+
+  const handleChangeOtp = (index: number, value: string): void => {
+    const newOtp: string[] = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+  };
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setEmail(e.target.value);
+  };
+
+
 
   const handleSendOtp = async (): Promise<void> => {
     try {
       const response = await axios.post(
-        "http://localhost:6001/signin-sendotp",
+        "http://localhost:6001/forgot-sendotp",
         {
           email: email
         }
@@ -34,44 +39,35 @@ const SigninOTP: React.FC = () => {
       setSuccessMessage("");
     }
   };
-
+  
   const handleVerifyOtp = async (): Promise<void> => {
     try {
       const enteredOtp: string = otp.join("");
       console.log("Entered OTP:", enteredOtp);
 
       const response = await axios.post(
-        "http://localhost:6001/verifyotp-signin",
+        "http://localhost:6001/verifyotp-forgot",
         {
           email: email,
           otp: enteredOtp
         }
       );
-      
+      console.log(response.data);
       // Assuming the backend sends some response data
       if (response.status === 200) {
         setSuccessMessage("OTP verified successfully");
         setErrorMessage("");
-        navigate("/mainPage");
+        // navigate("/");
       } else {
         setErrorMessage("Invalid OTP");
         setSuccessMessage("");
       }
+      navigate('/setPassword',{ state: { email } })
     } catch (error) {
       console.error("Error verifying OTP:", error);
       setErrorMessage("Error verifying OTP. Please try again.");
       setSuccessMessage("");
     }
-  };
-
-  const handleChangeOtp = (index: number, value: string): void => {
-    const newOtp: string[] = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setEmail(e.target.value);
   };
 
   return (
@@ -118,4 +114,4 @@ const SigninOTP: React.FC = () => {
   );
 };
 
-export default SigninOTP;
+export default ForgotPass;
