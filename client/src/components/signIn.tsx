@@ -59,7 +59,7 @@ const SignIn = () => {
               <input
                 type="password"
                 name="password"
-                placeholder=" Password"
+                placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
               />
@@ -68,7 +68,9 @@ const SignIn = () => {
             <button type="submit">Sign In</button>
             
             <button className="btn" onClick={handleotp}>SignIn with OTP</button>
-            <a onClick={handleForgotPassword}><p>forgot password</p></a>
+            <span className="forgot-password-link" onClick={handleForgotPassword}>
+            Forgot password
+            </span>
           </form>
         </div>
       </div>
