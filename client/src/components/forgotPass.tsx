@@ -71,7 +71,8 @@ const ForgotPass: React.FC = () => {
   };
 
   return (
-    <div className='otpcontainer'>
+    <div className='otpforgotcontainer'>
+      <div className='otpfogot-form'>
       <h3>OTP Verification</h3>
 
       {successMessage && <div className='success'>{successMessage}</div>}
@@ -110,6 +111,7 @@ const ForgotPass: React.FC = () => {
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 };
