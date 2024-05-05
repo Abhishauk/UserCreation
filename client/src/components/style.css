@@ -274,7 +274,7 @@ a {
 }
 
 .otp-btn {
-  width: 100%;
+  width: 49%;
   padding: 10px;
   background-color: #5b3d67;
   color: #fff;
@@ -282,6 +282,7 @@ a {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-top: 5px;
 }
 
 .otp-btn:hover {
