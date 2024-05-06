@@ -108,6 +108,8 @@ export const sendOTPsignin = async (req: Request, res: Response) => {
   try {
     // Extract email from the request body
     const { email } = req.body;
+    console.log("aaaaaaa",email);
+    
 
     // Generate OTP (for demonstration purposes)
     const otp = Math.floor(1000 + Math.random() * 9000).toString();

@@ -11,12 +11,16 @@ const SigninOTP: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const formData = location.state?.formData;
+  console.log(",,,,,,,,,",formData);
+  
 
   const handleSendOtp = async (): Promise<void> => {
     try {
       const response = await axios.post("http://localhost:6001/signin-sendotp", {
         email: email
       });
+      console.log("reaponae",response.data);
+      
       setSuccessMessage("OTP sent successfully to your email.");
       setErrorMessage("");
     } catch (error) {

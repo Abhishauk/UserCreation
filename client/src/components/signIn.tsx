@@ -2,6 +2,8 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import './style.css';
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -23,22 +25,26 @@ const SignIn = () => {
         data: formData
       });
       console.log("Response from server:", response.data);
+      toast.success('Login successful!');
       navigate("/mainPage");
       setFormData({ email: "", password: "" });
     } catch (error) {
       console.error("Error submitting form:", error);
+      toast.error('Incorrect password. Please try again.');
     }
   };
 
   const handleotp = () => {
     navigate("/signinotp",{ state: { formData } });
   }
+  
   const handleForgotPassword = () => {
     navigate("/forgotpass")
   }
 
   return (
     <div className="signup-container">
+      <ToastContainer />
       <div className="image-container">
         <img src="/signup.png" alt="Sign Up" className="signup-image" />
       </div>
@@ -69,7 +75,7 @@ const SignIn = () => {
             
             <button className="btn" onClick={handleotp}>SignIn with OTP</button>
             <span className="forgot-password-link" onClick={handleForgotPassword}>
-            Forgot password
+              Forgot password
             </span>
           </form>
         </div>
