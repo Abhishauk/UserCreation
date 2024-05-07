@@ -300,3 +300,7 @@ a {
   color: red;
   margin-bottom: 10px;
 }
+/* Add this to your CSS file */
+.toast-message {
+  font-size: 10px; /* Adjust the font size as needed */
+}
