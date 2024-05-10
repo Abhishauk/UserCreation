@@ -2,8 +2,8 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface FormData {
   firstName: string;
@@ -42,9 +42,16 @@ const SignUp = () => {
     e.preventDefault();
 
     // Check if all required fields are filled
-    if (!formData.firstName || !formData.lastName || !formData.password || !formData.retypePassword || !formData.contactMode || (formData.contactMode === "email" && !formData.email)) {
-      toast.error('Please fill in all fields.',{
-        className: 'toast-message' // Apply custom class for smaller text
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.password ||
+      !formData.retypePassword ||
+      !formData.contactMode ||
+      (formData.contactMode === "email" && !formData.email)
+    ) {
+      toast.error("Please fill in all fields.", {
+        className: "toast-message"
       });
       return;
     }
@@ -72,10 +79,14 @@ const SignUp = () => {
       console.log("==========", formData);
 
       navigate("/signupOTP", { state: { formData } });
-    }  catch (error: any) { // Explicitly specify type as any
-      if (error.response && error.response.status === 400 && error.response.data.msg === 'email already exists') {
-        toast.error('Email already exists. Please use a different email.', {
-          className: 'toast-message' // Apply custom class for smaller text
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.msg === "email already exists"
+      ) {
+        toast.error("Email already exists. Please use a different email.", {
+          className: "toast-message"
         });
       } else {
         console.error("Error submitting form:", error);

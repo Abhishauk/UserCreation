@@ -17,10 +17,9 @@ const SignIn = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Check if both email and password are provided
     if (!formData.email || !formData.password) {
       toast.error('Please fill in both email and password fields.', {
-        className: 'toast-message' // Apply custom class for smaller text
+        className: 'toast-message' 
       });
       return;
     }
@@ -35,14 +34,14 @@ const SignIn = () => {
       });
       console.log("Response from server:", response.data);
       toast.success('Login successful!', {
-        className: 'toast-message' // Apply custom class for smaller text
+        className: 'toast-message' 
       });
       navigate("/mainPage");
       setFormData({ email: "", password: "" });
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error('Incorrect password. Please try again.', {
-        className: 'toast-message' // Apply custom class for smaller text
+        className: 'toast-message' 
       });
     }
   };
@@ -50,7 +49,7 @@ const SignIn = () => {
   const handleotp = () => {
     // Show toast message
     toast.success('OTP sent successfully!', {
-      className: 'toast-message' // Apply custom class for smaller text
+      className: 'toast-message' 
     });
     navigate("/signinotp",{ state: { formData } });
   }
