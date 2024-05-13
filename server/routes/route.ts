@@ -15,7 +15,6 @@ const router = express.Router();
 router.get('/',Home);
 router.post('/signup',signup);
 router.post('/signin',signin);
-// router.post('/sendotp-signup' ,sendOTPsignup)
 router.post('/verifyotp-signup' , verifyotpSignup)
 router.post('/signin-sendotp' ,sendOTPsignin)
 router.post('/verifyotp-signin' , verifyotpSignin)

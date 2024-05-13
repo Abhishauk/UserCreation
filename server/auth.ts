@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
-
 dotenv.config();
 interface SavedOTPS {
   [key: string]: string;
@@ -108,8 +107,7 @@ export const sendOTPsignin = async (req: Request, res: Response) => {
   try {
     // Extract email from the request body
     const { email } = req.body;
-    console.log("aaaaaaa",email);
-    
+    console.log("aaaaaaa", email);
 
     // Generate OTP (for demonstration purposes)
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
@@ -138,7 +136,6 @@ export const sendOTPsignin = async (req: Request, res: Response) => {
       }
     });
   } catch (error) {
-    // Handle errors
     console.error("Error sending OTP:", error);
     return res
       .status(500)
@@ -208,26 +205,20 @@ export const verifyotpSignin = async (req: Request, res: Response) => {
   }
 };
 
-
 export const sendOTPforgot = async (req: Request, res: Response) => {
   try {
-    // Extract email from the request body
     const { email } = req.body;
 
-    // Check if the user exists in the database
     const user = await User.findOne({ email: email });
 
-    // If user doesn't exist, return error
     if (!user) {
       return res.status(400).json({ success: false, message: "Invalid user" });
     }
 
-    // Generate OTP (for demonstration purposes)
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
 
-    // Configure email options
     const mailOptions = {
-      from: process.env.USER_EMAIL, // Update with your email
+      from: process.env.USER_EMAIL,
       to: email,
       subject: "Your OTP for verification",
       text: `Your OTP is: ${otp}`
@@ -249,7 +240,6 @@ export const sendOTPforgot = async (req: Request, res: Response) => {
       }
     });
   } catch (error) {
-    // Handle errors
     console.error("Error sending OTP:", error);
     return res
       .status(500)
@@ -257,7 +247,7 @@ export const sendOTPforgot = async (req: Request, res: Response) => {
   }
 };
 
-export const verifyotpforgot = async(req: Request , res: Response) => {
+export const verifyotpforgot = async (req: Request, res: Response) => {
   console.log("Request bodyyyyyyyyy:", req.body);
 
   const { email, otp } = req.body;
@@ -276,11 +266,7 @@ export const verifyotpforgot = async(req: Request , res: Response) => {
     console.log("Invalid OTP.");
     return res.status(400).json({ success: false, message: "Invalid OTP" });
   }
-}
-
-
-
-
+};
 
 export const setpassword = async (req: Request, res: Response) => {
   try {
@@ -290,11 +276,18 @@ export const setpassword = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(newpass, 10); // 10 is the salt rounds
 
     // Update the user's hashed password in the database
-    await User.updateOne({ email: email }, { $set: { password: hashedPassword } });
+    await User.updateOne(
+      { email: email },
+      { $set: { password: hashedPassword } }
+    );
 
-    return res.status(200).json({ success: true, message: "Password updated successfully" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Password updated successfully" });
   } catch (error) {
     console.error("Error updating password:", error);
-    return res.status(500).json({ success: false, message: "Internal Server Error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
   }
 };
