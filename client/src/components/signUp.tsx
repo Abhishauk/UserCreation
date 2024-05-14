@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -28,9 +28,7 @@ const SignUp = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -59,11 +57,7 @@ const SignUp = () => {
     console.log("Form submitted with data:", formData);
 
     try {
-      const response = await axios({
-        method: "post",
-        url: "http://localhost:6001/signup",
-        data: formData
-      });
+      const response = await axios.post("http://localhost:6001/signup", formData);
 
       console.log("Response from server:", response.data);
       setFormData({
@@ -79,17 +73,21 @@ const SignUp = () => {
       console.log("==========", formData);
 
       navigate("/signupOTP", { state: { formData } });
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.status === 400 &&
-        error.response.data.msg === "email already exists"
-      ) {
-        toast.error("Email already exists. Please use a different email.", {
-          className: "toast-message"
-        });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (
+          error.response &&
+          error.response.status === 400 &&
+          error.response.data.msg === "email already exists"
+        ) {
+          toast.error("Email already exists. Please use a different email.", {
+            className: "toast-message"
+          });
+        } else {
+          console.error("Error submitting form:", error);
+        }
       } else {
-        console.error("Error submitting form:", error);
+        console.error("Unexpected error:", error);
       }
     }
   };
@@ -148,7 +146,7 @@ const SignUp = () => {
                 <option value="email">Email</option>
               </select>
             </div>
-            {formData.contactMode === "email" &&
+            {formData.contactMode === "email" && (
               <div className="form-group">
                 <input
                   type="email"
@@ -157,12 +155,13 @@ const SignUp = () => {
                   value={formData.email}
                   onChange={handleChange}
                 />
-              </div>}
+              </div>
+            )}
 
             <button className="btn" type="submit">
               Send OTP
             </button>
-            {otpSent &&
+            {otpSent && (
               <div className="title center">
                 <p>
                   An OTP has been sent to{" "}
@@ -170,11 +169,10 @@ const SignUp = () => {
                     ***{formData.email.slice(3)}
                   </span>
                 </p>
-              </div>}
+              </div>
+            )}
           </form>
-          <div className="success">
-            {successMessage}
-          </div>
+          <div className="success">{successMessage}</div>
         </div>
       </div>
       <ToastContainer />
