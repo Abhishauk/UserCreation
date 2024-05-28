@@ -28,7 +28,9 @@ const SignUp = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -57,7 +59,10 @@ const SignUp = () => {
     console.log("Form submitted with data:", formData);
 
     try {
-      const response = await axios.post("http://localhost:6001/signup", formData);
+      const response = await axios.post(
+        "http://localhost:6001/signup",
+        formData
+      );
 
       console.log("Response from server:", response.data);
       setFormData({
@@ -73,7 +78,7 @@ const SignUp = () => {
       console.log("==========", formData);
 
       navigate("/signupOTP", { state: { formData } });
-    } catch (error: unknown) {
+    } catch (error) {
       if (axios.isAxiosError(error)) {
         if (
           error.response &&
@@ -146,7 +151,7 @@ const SignUp = () => {
                 <option value="email">Email</option>
               </select>
             </div>
-            {formData.contactMode === "email" && (
+            {formData.contactMode === "email" &&
               <div className="form-group">
                 <input
                   type="email"
@@ -155,13 +160,12 @@ const SignUp = () => {
                   value={formData.email}
                   onChange={handleChange}
                 />
-              </div>
-            )}
+              </div>}
 
             <button className="btn" type="submit">
               Send OTP
             </button>
-            {otpSent && (
+            {otpSent &&
               <div className="title center">
                 <p>
                   An OTP has been sent to{" "}
@@ -169,10 +173,11 @@ const SignUp = () => {
                     ***{formData.email.slice(3)}
                   </span>
                 </p>
-              </div>
-            )}
+              </div>}
           </form>
-          <div className="success">{successMessage}</div>
+          <div className="success">
+            {successMessage}
+          </div>
         </div>
       </div>
       <ToastContainer />

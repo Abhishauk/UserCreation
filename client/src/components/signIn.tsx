@@ -1,13 +1,13 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-import './style.css';
+import "./style.css";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -18,8 +18,8 @@ const SignIn = () => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
-      toast.error('Please fill in both email and password fields.', {
-        className: 'toast-message' 
+      toast.error("Please fill in both email and password fields.", {
+        className: "toast-message"
       });
       return;
     }
@@ -33,30 +33,30 @@ const SignIn = () => {
         data: formData
       });
       console.log("Response from server:", response.data);
-      toast.success('Login successful!', {
-        className: 'toast-message' 
+      toast.success("Login successful!", {
+        className: "toast-message"
       });
       navigate("/mainPage");
       setFormData({ email: "", password: "" });
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error('Incorrect password. Please try again.', {
-        className: 'toast-message' 
+      toast.error("Incorrect password. Please try again.", {
+        className: "toast-message"
       });
     }
   };
 
   const handleotp = () => {
     // Show toast message
-    toast.success('OTP sent successfully!', {
-      className: 'toast-message' 
+    toast.success("OTP sent successfully!", {
+      className: "toast-message"
     });
-    navigate("/signinotp",{ state: { formData } });
-  }
-  
+    navigate("/signinotp", { state: { formData } });
+  };
+
   const handleForgotPassword = () => {
-    navigate("/forgotpass")
-  }
+    navigate("/forgotpass");
+  };
 
   return (
     <div className="signup-container">
@@ -88,9 +88,14 @@ const SignIn = () => {
             </div>
 
             <button type="submit">Sign In</button>
-            
-            <button className="btn" onClick={handleotp}>SignIn with OTP</button>
-            <span className="forgot-password-link" onClick={handleForgotPassword}>
+
+            <button className="btn" onClick={handleotp}>
+              SignIn with OTP
+            </button>
+            <span
+              className="forgot-password-link"
+              onClick={handleForgotPassword}
+            >
               Forgot password
             </span>
           </form>
